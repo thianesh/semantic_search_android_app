@@ -13,7 +13,7 @@ import Tag from 'primevue/tag';
 // Configure transformers.js to use the hosted models (it will cache them in browser cache)
 env.allowLocalModels = true;
 env.allowRemoteModels = false;
-env.localModelPath = './public/models/';
+env.localModelPath = './models/';
 console.log("Transformers Env:", env);
 
 const MODEL_NAME = 'Xenova/all-MiniLM-L6-v2';
