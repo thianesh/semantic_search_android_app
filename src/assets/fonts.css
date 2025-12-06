@@ -1,0 +1,33 @@
+@font-face {
+  /* 1. Choose a name for your font family */
+  font-family: 'ZalandoSemiExpanded'; 
+  
+  /* 2. Specify the path to the font file. 
+     This path is relative to the location of the CSS file! 
+     
+     If your CSS is in 'src/styles/style.css', you need to go up one 
+     level ('../') to the 'src/' folder, then into 'assets/...'.
+  */
+  src: url('../assets/Michroma,Momo_Trust_Display,Tilt_Neon,Zalando_Sans_SemiExpanded/Zalando_Sans_SemiExpanded/ZalandoSansSemiExpanded-VariableFont_wght.ttf') format('truetype');
+  
+  /* Optional: Define characteristics if it's a variable font */
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  /* 1. Choose a name for your font family */
+  font-family: 'TiltNeon'; 
+  
+  /* 2. Specify the path to the font file. 
+     This path is relative to the location of the CSS file! 
+     
+     If your CSS is in 'src/styles/style.css', you need to go up one 
+     level ('../') to the 'src/' folder, then into 'assets/...'.
+  */
+  src: url('../assets/Michroma,Momo_Trust_Display,Tilt_Neon,Zalando_Sans_SemiExpanded/Tilt_Neon/TiltNeon-Regular-VariableFont_XROT,YROT.ttf') format('truetype');
+  
+  /* Optional: Define characteristics if it's a variable font */
+  font-weight: 100 900;
+  font-style: normal;
+}

@@ -1,0 +1,5 @@
+@import './fonts.css';
+body {
+    padding: 1rem;
+    font-family: 'TiltNeon','ZalandoSemiExpanded', Arial, sans-serif;
+}
