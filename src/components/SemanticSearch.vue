@@ -114,6 +114,7 @@ const deleteItem = (id) => {
 const editItem = (item) => {
     inputText.value = item.text;
     editingId.value = item.id;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 const cancelEdit = () => {
