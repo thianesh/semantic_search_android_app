@@ -208,7 +208,7 @@ const search = async () => {
                             <div class="flex flex-column gap-3">
                                 <div v-for="result in searchResults" :key="result.id" class="p-3 surface-card border-round shadow-1 align-items-center justify-content-between gap-1">
                                     <div class="flex-grow-1 overflow-hidden" style="min-width: 0; max-width: 250px;">
-                                        <p class="m-0 text-overflow-ellipsis cursor-pointer" @click="openPreview(result)" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <p class="m-0 cursor-pointer" @click="openPreview(result)" style="display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
                                             {{ result.text }}
                                         </p>
                                     </div>
@@ -233,7 +233,7 @@ const search = async () => {
             <div class="flex flex-column gap-3">
                  <div v-for="item in storedItems" :key="item.id" class="p-3 surface-card border-round shadow-1 flex align-items-center justify-content-between gap-3">
                     <div class="flex-grow-1 overflow-hidden" style="min-width: 0; max-width: 500px;">
-                        <p class="m-0 text-overflow-ellipsis cursor-pointer" @click="openPreview(item)" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <p class="m-0 cursor-pointer" @click="openPreview(item)" style="display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
                             {{ item.text }}
                         </p>
                     </div>
