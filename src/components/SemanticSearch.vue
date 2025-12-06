@@ -8,6 +8,7 @@ import Card from 'primevue/card';
 import ProgressBar from 'primevue/progressbar';
 import Message from 'primevue/message';
 import Dialog from 'primevue/dialog';
+import Tag from 'primevue/tag';
 
 // Configure transformers.js to use the hosted models (it will cache them in browser cache)
 env.allowLocalModels = true;
@@ -103,6 +104,7 @@ const saveMessage = async () => {
 
 const deleteItem = (id) => {
     storedItems.value = storedItems.value.filter(item => item.id !== id);
+    searchResults.value = searchResults.value.filter(item => item.id !== id);
     localStorage.setItem('semantic_search_items', JSON.stringify(storedItems.value));
     if (editingId.value === id) {
         cancelEdit();
@@ -196,15 +198,28 @@ const search = async () => {
                             <label for="search-input">Search query</label>
                             <div class="p-inputgroup">
                                 <InputText id="search-input" v-model="searchQuery" @keyup.enter="search" placeholder="Type and press enter..." />
-                                <Button icon="pi pi-search" @click="search" :disabled="isLoading" />
+                                <Button icon="pi pi-search" @click="search" :disabled="isLoading" label="Query" />
                             </div>
                         </div>
 
                         <div class="results mt-4" v-if="searchResults.length > 0">
                             <h3>Results</h3>
-                            <div v-for="result in searchResults" :key="result.id" class="result-item mb-2 p-2 border-round surface-ground">
-                                <div class="font-bold">{{ result.text }}</div>
-                                <div class="text-sm text-500">Similarity: {{ result.score.toFixed(4) }}</div>
+                            <div class="flex flex-column gap-3">
+                                <div v-for="result in searchResults" :key="result.id" class="p-3 surface-card border-round shadow-1 align-items-center justify-content-between gap-1">
+                                    <div class="flex-grow-1 overflow-hidden" style="min-width: 0; max-width: 250px;">
+                                        <p class="m-0 text-overflow-ellipsis cursor-pointer" @click="openPreview(result)" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            {{ result.text }}
+                                        </p>
+                                    </div>
+                                    <div class="flex gap-1">
+                                        <Tag :value="'Similarity: ' + result.score.toFixed(4)"></Tag>
+                                        <div class="flex gap-1 flex-shrink-0 pl-2">
+                                            <Button icon="pi pi-pencil" severity="info" text rounded variant="outlined" aria-label="Edit" @click="editItem(result)" />
+                                            <Button icon="pi pi-trash" severity="danger" text rounded aria-label="Delete" @click="deleteItem(result.id)" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                </div>
                             </div>
                         </div>
                     </template>
@@ -216,9 +231,11 @@ const search = async () => {
             <h3>Stored Items ({{ storedItems.length }})</h3>
             <div class="flex flex-column gap-3">
                  <div v-for="item in storedItems" :key="item.id" class="p-3 surface-card border-round shadow-1 flex align-items-center justify-content-between gap-3">
-                    <p class="m-0 text-overflow-ellipsis cursor-pointer flex-grow-1" @click="openPreview(item)" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        {{ item.text }}
-                    </p>
+                    <div class="flex-grow-1 overflow-hidden" style="min-width: 0; max-width: 500px;">
+                        <p class="m-0 text-overflow-ellipsis cursor-pointer" @click="openPreview(item)" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{ item.text }}
+                        </p>
+                    </div>
                     <div class="flex gap-2 flex-shrink-0">
                         <Button icon="pi pi-pencil" severity="info" text rounded variant="outlined" aria-label="Edit" @click="editItem(item)" />
                         <Button icon="pi pi-trash" severity="danger" text rounded aria-label="Delete" @click="deleteItem(item.id)" />
@@ -239,7 +256,7 @@ const search = async () => {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0rem;
+    padding: 1rem;
 }
 .mt-2 { margin-top: 0.5rem; }
 .mt-4 { margin-top: 2rem; }
