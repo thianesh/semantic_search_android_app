@@ -1,5 +1,5 @@
 {
-  "appId": "com.embed",
-  "appName": "embed",
+  "appId": "com.semanticsearch.app",
+  "appName": "semantic search",
   "webDir": "dist"
 }
