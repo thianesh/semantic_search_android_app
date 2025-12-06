@@ -1,23 +1,18 @@
-# .
+# Semantic Search App
 
-This template should help get you started developing with Vue 3 in Vite.
+A Vue 3 application that performs semantic search using local embeddings via [@huggingface/transformers](https://huggingface.co/docs/transformers.js).
+
+## Features
+
+- **Local Embeddings**: Generates text embeddings locally in the browser using the `Xenova/all-MiniLM-L6-v2` model.
+- **Semantic Search**: Performs vector similarity search using cosine similarity to find relevant messages.
+- **Privacy Focused**: All data and processing happen client-side; no data is sent to external servers.
+- **Persistence**: Saves messages and embeddings to the browser's Local Storage.
+- **Modern UI**: Built with [PrimeVue](https://primevue.org/) components for a polished look and feel.
 
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
 
