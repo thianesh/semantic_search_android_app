@@ -1,7 +1,10 @@
-<script setup></script>
+<script setup>
+import SemanticSearch from './components/SemanticSearch.vue';
+</script>
 
 <template>
-  <h1>You did it!</h1>
+  <SemanticSearch />
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>
