@@ -7,6 +7,7 @@ import InputText from 'primevue/inputtext';
 import Card from 'primevue/card';
 import ProgressBar from 'primevue/progressbar';
 import Message from 'primevue/message';
+import Dialog from 'primevue/dialog';
 
 // Configure transformers.js to use the hosted models (it will cache them in browser cache)
 env.allowLocalModels = true;
@@ -25,6 +26,9 @@ const inputText = ref('');
 const searchQuery = ref('');
 const searchResults = ref([]);
 const storedItems = ref([]);
+const editingId = ref(null);
+const showPreview = ref(false);
+const previewItem = ref(null);
 
 onMounted(async () => {
     loadStoredItems();
@@ -68,18 +72,56 @@ const saveMessage = async () => {
         const output = await extractor.value(text, { pooling: 'mean', normalize: true });
         const embedding = Array.from(output.data);
 
-        const newItem = {
-            id: Date.now(),
-            text: text,
-            embedding: embedding
-        };
-
-        storedItems.value.push(newItem);
-        localStorage.setItem('semantic_search_items', JSON.stringify(storedItems.value));
+        if (editingId.value) {
+            // Update existing item
+            const index = storedItems.value.findIndex(item => item.id === editingId.value);
+            if (index !== -1) {
+                storedItems.value[index] = {
+                    ...storedItems.value[index],
+                    text: text,
+                    embedding: embedding
+                };
+                localStorage.setItem('semantic_search_items', JSON.stringify(storedItems.value));
+            }
+            editingId.value = null;
+        } else {
+            // Add new item
+            const newItem = {
+                id: Date.now(),
+                text: text,
+                embedding: embedding
+            };
+            storedItems.value.push(newItem);
+            localStorage.setItem('semantic_search_items', JSON.stringify(storedItems.value));
+        }
+        
         inputText.value = '';
     } catch (e) {
         console.error("Error generating embedding:", e);
     }
+};
+
+const deleteItem = (id) => {
+    storedItems.value = storedItems.value.filter(item => item.id !== id);
+    localStorage.setItem('semantic_search_items', JSON.stringify(storedItems.value));
+    if (editingId.value === id) {
+        cancelEdit();
+    }
+};
+
+const editItem = (item) => {
+    inputText.value = item.text;
+    editingId.value = item.id;
+};
+
+const cancelEdit = () => {
+    inputText.value = '';
+    editingId.value = null;
+};
+
+const openPreview = (item) => {
+    previewItem.value = item;
+    showPreview.value = true;
 };
 
 const cosineSimilarity = (a, b) => {
@@ -124,7 +166,7 @@ const search = async () => {
 
 <template>
     <div class="container">
-        <div class="status-bar" v-if="isLoading || loadingStatus">
+        <div class="status-bar" v-if="(isLoading || loadingStatus) && loadingStatus != 'Model ready.'">
             <Message :severity="isLoading ? 'info' : 'success'" :closable="false">{{ loadingStatus }}</Message>
             <ProgressBar v-if="isLoading && progress > 0" :value="progress" class="mt-2"></ProgressBar>
         </div>
@@ -137,7 +179,10 @@ const search = async () => {
                         <div class="flex flex-column gap-2">
                             <label for="input-text">Enter text to save</label>
                             <Textarea id="input-text" v-model="inputText" rows="5" autoResize class="w-full" />
-                            <Button label="Save" icon="pi pi-save" @click="saveMessage" :disabled="isLoading || !inputText" />
+                            <div class="flex gap-2">
+                                <Button :label="editingId ? 'Update' : 'Save'" :icon="editingId ? 'pi pi-check' : 'pi pi-save'" @click="saveMessage" :disabled="isLoading || !inputText" />
+                                <Button v-if="editingId" label="Cancel" icon="pi pi-times" severity="secondary" @click="cancelEdit" />
+                            </div>
                         </div>
                     </template>
                 </Card>
@@ -169,9 +214,23 @@ const search = async () => {
         
         <div class="mt-4">
             <h3>Stored Items ({{ storedItems.length }})</h3>
-            <div class="flex flex-wrap gap-2">
-                 <span v-for="item in storedItems" :key="item.id" class="p-tag p-tag-info">{{ item.text.substring(0, 20) }}...</span>
+            <div class="flex flex-column gap-3">
+                 <div v-for="item in storedItems" :key="item.id" class="p-3 surface-card border-round shadow-1 flex align-items-center justify-content-between gap-3">
+                    <p class="m-0 text-overflow-ellipsis cursor-pointer flex-grow-1" @click="openPreview(item)" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        {{ item.text }}
+                    </p>
+                    <div class="flex gap-2 flex-shrink-0">
+                        <Button icon="pi pi-pencil" severity="info" text rounded variant="outlined" aria-label="Edit" @click="editItem(item)" />
+                        <Button icon="pi pi-trash" severity="danger" text rounded aria-label="Delete" @click="deleteItem(item.id)" />
+                    </div>
+                 </div>
             </div>
+
+            <Dialog v-model:visible="showPreview" modal header="Item Preview" :style="{ width: '50vw' }" :breakpoints="{ '960px': '75vw', '641px': '90vw' }">
+                <p class="m-0" style="white-space: pre-wrap;">
+                    {{ previewItem?.text }}
+                </p>
+            </Dialog>
         </div>
     </div>
 </template>
