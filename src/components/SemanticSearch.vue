@@ -174,6 +174,8 @@ const search = async () => {
             <ProgressBar v-if="isLoading && progress > 0" :value="progress" class="mt-2"></ProgressBar>
         </div>
 
+        <h2 class="modern_heading">Search Semantic</h2>
+
         <div class="grid">
             <div class="col-12 md:col-6">
                 <Card>
@@ -193,7 +195,7 @@ const search = async () => {
 
             <div class="col-12 md:col-6">
                 <Card>
-                    <template #title>Semantic Search</template>
+                    <template #title >Semantic Search</template>
                     <template #content>
                         <div class="flex flex-column gap-2">
                             <label for="search-input">Search query</label>
@@ -273,4 +275,8 @@ const search = async () => {
 }
 .surface-ground { background-color: var(--surface-ground); }
 .border-round { border-radius: 6px; }
+.modern_heading {
+    font-size: 1rem;
+    font-family: 'Michroma';
+}
 </style>
